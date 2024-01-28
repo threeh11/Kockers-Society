@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./../app/:/var/www/html
+    ports:
+      - "8078:80"
+    container_name: nginx_con
+    depends_on: [php]
+
+  php:
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+    volumes:
+      - ./../app/:/var/www/html
+    container_name: php_con
+
+  npm:
+    image: node:latest
+    volumes:
+      - ./../app/:/var/www/html
+    working_dir: /var/www/html
+    container_name: npm_con
+    command: tail -f /dev/null
